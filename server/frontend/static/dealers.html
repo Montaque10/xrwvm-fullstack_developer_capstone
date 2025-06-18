@@ -1,0 +1,171 @@
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="static/bootstrap.min.css">
+<script>
+
+let checkSession = ()=>{
+  let curr_user = sessionStorage.getItem("username");
+
+  if (curr_user && curr_user !== "") {
+    document.getElementById("loginlogout").innerHTML = 
+    '<span class="homepage_links">' + curr_user +'</span>' +
+    '<a class="homepage_links" onclick="logout()" href="/">Logout</a>'
+  } else {
+    document.getElementById("loginlogout").innerHTML = 
+    '<a class="homepage_links" href="/login">Login</a>'+
+    '<a class="homepage_links"  href="/register">Register</a>'
+  }
+ }
+
+async function getDealers() {
+  let url = window.location.origin + "/djangoapp/get_dealers";
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+async function getDealersByState(state) {
+  let url = window.location.origin + "/djangoapp/get_dealers/" + state;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+async function loadDealers() {
+  const dealers = await getDealers();
+  const dealerTableBody = document.getElementById("dealer-table-body");
+  dealerTableBody.innerHTML = "";
+  
+  dealers.forEach(dealer => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${dealer.short_name}</td>
+      <td>${dealer.full_name}</td>
+      <td>${dealer.city}, ${dealer.st}</td>
+      <td>
+        <a href="/dealer/${dealer.id}" class="btn btn-primary btn-sm">View Details</a>
+        <a href="/dealer/${dealer.id}/reviews" class="btn btn-info btn-sm">Reviews</a>
+        ${sessionStorage.getItem("username") ? `<a href="/add_review/${dealer.id}" class="btn btn-success btn-sm">Post Review</a>` : ''}
+      </td>
+    `;
+    dealerTableBody.appendChild(row);
+  });
+}
+
+async function filterByState() {
+  const state = document.getElementById("state-filter").value;
+  if (state === "all") {
+    await loadDealers();
+  } else {
+    const dealers = await getDealersByState(state);
+    const dealerTableBody = document.getElementById("dealer-table-body");
+    dealerTableBody.innerHTML = "";
+    
+    dealers.forEach(dealer => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${dealer.short_name}</td>
+        <td>${dealer.full_name}</td>
+        <td>${dealer.city}, ${dealer.st}</td>
+        <td>
+          <a href="/dealer/${dealer.id}" class="btn btn-primary btn-sm">View Details</a>
+          <a href="/dealer/${dealer.id}/reviews" class="btn btn-info btn-sm">Reviews</a>
+          ${sessionStorage.getItem("username") ? `<a href="/add_review/${dealer.id}" class="btn btn-success btn-sm">Post Review</a>` : ''}
+        </td>
+      `;
+      dealerTableBody.appendChild(row);
+    });
+  }
+}
+</script>
+</head>
+<body onload="checkSession(); loadDealers();">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
+  <div class="container-fluid">
+    <h2 style="padding-right: 5%;">Dealerships</h2>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" style="font-size: larger;" aria-current="page" href="/dealers">Dealers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        <div class="loginlink" id="loginlogout">
+        </div>
+        </span>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h1>Dealerships</h1>
+  
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label for="state-filter" class="form-label">Filter by State:</label>
+      <select class="form-select" id="state-filter" onchange="filterByState()">
+        <option value="all">All States</option>
+        <option value="CA">California</option>
+        <option value="TX">Texas</option>
+        <option value="NY">New York</option>
+        <option value="FL">Florida</option>
+        <option value="IL">Illinois</option>
+        <option value="PA">Pennsylvania</option>
+        <option value="OH">Ohio</option>
+        <option value="GA">Georgia</option>
+        <option value="NC">North Carolina</option>
+        <option value="MI">Michigan</option>
+        <option value="KS">Kansas</option>
+      </select>
+    </div>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Short Name</th>
+        <th>Full Name</th>
+        <th>Location</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="dealer-table-body">
+      <!-- Dealers will be loaded here -->
+    </tbody>
+  </table>
+</div>
+
+<script>
+async function logout() {
+  let logout_url = window.location.origin+"/djangoapp/logout";
+  const res = await fetch(logout_url, {
+    method: "GET",
+  });
+
+  const json = await res.json();
+  if (json) {
+    let username = sessionStorage.getItem('username');
+    sessionStorage.removeItem('username');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+}
+</script>
+</body>
+</html> 

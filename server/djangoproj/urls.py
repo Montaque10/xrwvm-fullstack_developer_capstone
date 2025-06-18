@@ -28,21 +28,27 @@ urlpatterns = [
     path('djangoapp/', include('djangoapp.urls')),
 
     # Serve React app for root and main frontend routes
-    path('', TemplateView.as_view(template_name="index.html")),
-    path('about/', TemplateView.as_view(template_name="index.html")),
-    path('contact/', TemplateView.as_view(template_name="index.html")),
+    path('', TemplateView.as_view(template_name="Home.html")),
+    path('about/', TemplateView.as_view(template_name="About.html")),
+    path('contact/', TemplateView.as_view(template_name="Contact.html")),
     path('login/', TemplateView.as_view(template_name="index.html")),
     path('register/', TemplateView.as_view(template_name="index.html")),
+    
+    # Dynamic Django pages
+    path('dealers/', TemplateView.as_view(template_name="dealers.html")),
+    path('dealer/<int:dealer_id>/', TemplateView.as_view(template_name="dealer_details.html")),
+    path('add_review/', TemplateView.as_view(template_name="add_review.html")),
+    path('add_review/<int:dealer_id>/', TemplateView.as_view(template_name="add_review.html")),
 
-    # Serve React build static files
-    path('manifest.json', serve, {'path': 'manifest.json', 'document_root': os.path.join(settings.BASE_DIR, 'frontend/build')}),
-    path('favicon.ico', serve, {'path': 'favicon.ico', 'document_root': os.path.join(settings.BASE_DIR, 'frontend/build')}),
-    path('logo192.png', serve, {'path': 'logo192.png', 'document_root': os.path.join(settings.BASE_DIR, 'frontend/build')}),
-    path('logo512.png', serve, {'path': 'logo512.png', 'document_root': os.path.join(settings.BASE_DIR, 'frontend/build')}),
-    path('robots.txt', serve, {'path': 'robots.txt', 'document_root': os.path.join(settings.BASE_DIR, 'frontend/build')}),
+    # Serve static files from React build
+    path('manifest.json', serve, {'path': 'frontend/build/manifest.json', 'document_root': settings.BASE_DIR}),
+    path('favicon.ico', serve, {'path': 'frontend/build/favicon.ico', 'document_root': settings.BASE_DIR}),
+    path('logo192.png', serve, {'path': 'frontend/build/logo192.png', 'document_root': settings.BASE_DIR}),
+    path('logo512.png', serve, {'path': 'frontend/build/logo512.png', 'document_root': settings.BASE_DIR}),
+    path('robots.txt', serve, {'path': 'frontend/build/robots.txt', 'document_root': settings.BASE_DIR}),
 
-    # Catch-all: serve React app for any other route (SPA)
-    re_path(r'^(?!admin|djangoapp|static|media|api).*', TemplateView.as_view(template_name="index.html")),
+    # Catch-all route for React app
+    re_path(r'^.*$', TemplateView.as_view(template_name="index.html")),
 ]
 
 # Serve static files

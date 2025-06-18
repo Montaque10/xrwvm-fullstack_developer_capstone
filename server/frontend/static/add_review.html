@@ -1,0 +1,185 @@
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="static/style.css">
+  <link rel="stylesheet" href="static/bootstrap.min.css">
+<script>
+
+let checkSession = ()=>{
+  let curr_user = sessionStorage.getItem("username");
+
+  if (curr_user && curr_user !== "") {
+    document.getElementById("loginlogout").innerHTML = 
+    '<span class="homepage_links">' + curr_user +'</span>' +
+    '<a class="homepage_links" onclick="logout()" href="/">Logout</a>'
+  } else {
+    document.getElementById("loginlogout").innerHTML = 
+    '<a class="homepage_links" href="/login">Login</a>'+
+    '<a class="homepage_links"  href="/register">Register</a>'
+  }
+ }
+
+async function getDealers() {
+  let url = window.location.origin + "/djangoapp/get_dealers";
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+async function loadDealers() {
+  const dealers = await getDealers();
+  const dealerSelect = document.getElementById("dealership");
+  dealerSelect.innerHTML = '<option value="">Select a dealership</option>';
+  
+  dealers.forEach(dealer => {
+    const option = document.createElement("option");
+    option.value = dealer.id;
+    option.textContent = dealer.full_name;
+    dealerSelect.appendChild(option);
+  });
+}
+
+async function submitReview(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(event.target);
+  const reviewData = {
+    name: sessionStorage.getItem("username") || "Anonymous",
+    dealership: formData.get("dealership"),
+    review: formData.get("review"),
+    purchase: formData.get("purchase") === "on",
+    purchase_date: formData.get("purchase_date"),
+    car_make: formData.get("car_make"),
+    car_model: formData.get("car_model"),
+    car_year: formData.get("car_year")
+  };
+  
+  try {
+    const response = await fetch(window.location.origin + "/djangoapp/add_review", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reviewData)
+    });
+    
+    if (response.ok) {
+      alert("Review submitted successfully!");
+      window.location.href = "/dealers";
+    } else {
+      alert("Failed to submit review. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error submitting review:", error);
+    alert("Error submitting review. Please try again.");
+  }
+}
+</script>
+</head>
+<body onload="checkSession(); loadDealers();">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
+  <div class="container-fluid">
+    <h2 style="padding-right: 5%;">Dealerships</h2>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/dealers">Dealers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="font-size: larger;" href="/contact">Contact Us</a>
+        </li>
+      </ul>
+      <span class="navbar-text">
+        <div class="loginlink" id="loginlogout">
+        </div>
+        </span>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3>Post a Review</h3>
+        </div>
+        <div class="card-body">
+          <form onsubmit="submitReview(event)">
+            <div class="mb-3">
+              <label for="dealership" class="form-label">Dealership *</label>
+              <select class="form-select" id="dealership" name="dealership" required>
+                <option value="">Select a dealership</option>
+              </select>
+            </div>
+            
+            <div class="mb-3">
+              <label for="review" class="form-label">Review *</label>
+              <textarea class="form-control" id="review" name="review" rows="4" required placeholder="Write your review here..."></textarea>
+            </div>
+            
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="purchase" name="purchase">
+              <label class="form-check-label" for="purchase">I purchased a car from this dealership</label>
+            </div>
+            
+            <div class="mb-3">
+              <label for="purchase_date" class="form-label">Purchase Date</label>
+              <input type="date" class="form-control" id="purchase_date" name="purchase_date">
+            </div>
+            
+            <div class="row">
+              <div class="col-md-4">
+                <label for="car_make" class="form-label">Car Make</label>
+                <input type="text" class="form-control" id="car_make" name="car_make" placeholder="e.g., Toyota">
+              </div>
+              <div class="col-md-4">
+                <label for="car_model" class="form-label">Car Model</label>
+                <input type="text" class="form-control" id="car_model" name="car_model" placeholder="e.g., Camry">
+              </div>
+              <div class="col-md-4">
+                <label for="car_year" class="form-label">Car Year</label>
+                <input type="number" class="form-control" id="car_year" name="car_year" min="2015" max="2023" placeholder="e.g., 2022">
+              </div>
+            </div>
+            
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary">Submit Review</button>
+              <a href="/dealers" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function logout() {
+  let logout_url = window.location.origin+"/djangoapp/logout";
+  const res = await fetch(logout_url, {
+    method: "GET",
+  });
+
+  const json = await res.json();
+  if (json) {
+    let username = sessionStorage.getItem('username');
+    sessionStorage.removeItem('username');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+}
+</script>
+</body>
+</html> 
