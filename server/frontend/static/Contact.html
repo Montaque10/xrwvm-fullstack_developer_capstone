@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us - Best Cars</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light custom-navbar">
+    <div class="container-fluid">
+      <h2 class="dealerships-title">Dealerships</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link nav-large" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-large" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active nav-large" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="card contact-card">
+    <!-- Header Section -->
+    <div class="banner contact-header">
+      <div class="contact-header-content">
+        <img src="/static/contactus.png" alt="Contact Us" class="contact-hero-image">
+        <div class="contact-header-text">
+          <h1>Contact Us</h1>
+          <p>Get in touch with Best Cars dealership. We're here to help you find your perfect vehicle!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Information Section -->
+    <div class="container-fluid">
+      <div class="row contact-info-section">
+        <!-- Contact Details -->
+        <div class="col-lg-6 col-md-12 mb-4">
+          <div class="contact-info-card">
+            <h3 class="contact-section-title">Get In Touch</h3>
+            
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div class="contact-details">
+                <h5>Address</h5>
+                <p>1234 Auto Drive<br>
+                   Motor City, Michigan 48201<br>
+                   United States</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div class="contact-details">
+                <h5>Phone</h5>
+                <p>Sales: (555) 123-CARS (2277)<br>
+                   Service: (555) 123-AUTO (2886)<br>
+                   Finance: (555) 123-LOAN (5626)</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div class="contact-details">
+                <h5>Email</h5>
+                <p>info@bestcars.com<br>
+                   sales@bestcars.com<br>
+                   service@bestcars.com</p>
+              </div>
+            </div>
+
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="contact-details">
+                <h5>Business Hours</h5>
+                <p><strong>Monday - Friday:</strong> 9:00 AM - 8:00 PM<br>
+                   <strong>Saturday:</strong> 9:00 AM - 6:00 PM<br>
+                   <strong>Sunday:</strong> 12:00 PM - 5:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-6 col-md-12 mb-4">
+          <div class="contact-form-card">
+            <h3 class="contact-section-title">Send Us a Message</h3>
+            <form class="contact-form">
+              <div class="form-group mb-3">
+                <label for="fullName" class="form-label">Full Name *</label>
+                <input type="text" class="form-control" id="fullName" required>
+              </div>
+              
+              <div class="form-group mb-3">
+                <label for="email" class="form-label">Email Address *</label>
+                <input type="email" class="form-control" id="email" required>
+              </div>
+              
+              <div class="form-group mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone">
+              </div>
+              
+              <div class="form-group mb-3">
+                <label for="subject" class="form-label">Subject *</label>
+                <select class="form-control" id="subject" required>
+                  <option value="">Select a topic</option>
+                  <option value="sales">Sales Inquiry</option>
+                  <option value="service">Service Appointment</option>
+                  <option value="financing">Financing Questions</option>
+                  <option value="general">General Information</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div class="form-group mb-4">
+                <label for="message" class="form-label">Message *</label>
+                <textarea class="form-control" id="message" rows="5" placeholder="Tell us how we can help you..." required></textarea>
+              </div>
+              
+              <button type="submit" class="btn contact-submit-btn">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+      <h3 class="contact-section-title text-center mb-4">Visit Our Showroom</h3>
+      <div class="map-placeholder">
+        <div class="map-content">
+          <i class="fas fa-map-marked-alt"></i>
+          <h4>Find Us on the Map</h4>
+          <p>Located in the heart of Motor City, we're easy to find and accessible from all major highways.</p>
+          <button class="btn map-directions-btn">Get Directions</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Services -->
+    <div class="services-section">
+      <div class="container-fluid">
+        <h3 class="contact-section-title text-center mb-5">Our Services</h3>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-car"></i>
+              </div>
+              <h5>New Car Sales</h5>
+              <p>Browse our extensive inventory of new vehicles from top manufacturers.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-tools"></i>
+              </div>
+              <h5>Service & Repair</h5>
+              <p>Professional maintenance and repair services by certified technicians.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <h5>Financing</h5>
+              <p>Flexible financing options with competitive rates and easy approval.</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="service-card">
+              <div class="service-icon">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <h5>Trade-In</h5>
+              <p>Get the best value for your current vehicle with our trade-in program.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/your-kit-id.js" crossorigin="anonymous"></script>
+</body>
+</html>
